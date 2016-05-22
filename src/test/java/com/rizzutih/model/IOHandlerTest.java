@@ -1,15 +1,60 @@
 package com.rizzutih.model;
 
+import static org.mockito.Mockito.*;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.IOException;
 import static org.junit.Assert.*;
-
-import java.util.List;
-
+import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 
 public class IOHandlerTest {
 
+	@Spy private IOHandler spyIO;
+	@Mock private File mockFile;
+	@Mock private BufferedWriter mockBW;
+	
+	@Before
+	public void setUp(){
+		MockitoAnnotations.initMocks(this);
+	}
+	
 	@Test
-	public void testGenJsonReturnsJsonFromTextPanelStringwithOnePairOfText(){
+	public void testWriter() throws IOException{
+		doReturn(mockFile).when(spyIO).getFile(Extention.JSON);
+		doReturn(mockBW).when(spyIO).getBufferedWriter(mockFile);
+		spyIO.writer("Hi", Extention.JSON);
+		verify(mockBW).write("Hi");
+	}
+	
+	@Test
+	public void testWriterFileDoesntExist() throws IOException{
+		doReturn(mockFile).when(spyIO).getFile(Extention.JSON);
+		doReturn(false).when(mockFile).exists();
+		doReturn(mockBW).when(spyIO).getBufferedWriter(mockFile);
+		spyIO.writer("Hi", Extention.JSON);
+		verify(mockBW).write("Hi");
+	}
+	
+	@Test
+	public void testgetFileJSONExtention() throws IOException{
+		IOHandler io = new IOHandler();
+		assertEquals("C:\\Users\\euror\\Hossegor.json", io.getFile(Extention.JSON).getAbsolutePath());
+	}
+	
+	@Test
+	public void testgetFileTXTExtention() throws IOException{
+		IOHandler io = new IOHandler();
+		assertEquals("C:\\Users\\euror\\Documents\\JavaWorkspace\\HossegorTaskScheduler\\nullHossegor-Calendar.txt", io.getFile(Extention.TXT).getAbsolutePath());
+	}
+	
+	
+	@Test
+	public void testGenJsonReturnsJsonFromTextPanelStringwithOnePairOfText() throws IOHandlerException{
 		IOHandler io = new IOHandler();
 		String textpanel = "tasks: 30-07-2016 until 30-07-2016, Cooking, 2;Drink Preparation, 1;House Keeping, 2;Photo Taking, 1;Washing Up, 2.people: 30-07-2016 until 30-07-2016, Nico, House Keeping;Yann, Drink  Preparation;Hernan, Cooking;Andy, none;Simon, none;Bilal, none;Faz, Photo Taking;Antoine, none.";
 		String json = io.getJson(textpanel);
@@ -17,7 +62,7 @@ public class IOHandlerTest {
 	}
 	
 	@Test
-	public void testGenJsonReturnsJsonFromTextPanelStringwithTwoPairsOfText(){
+	public void testGenJsonReturnsJsonFromTextPanelStringwithTwoPairsOfText() throws IOHandlerException{
 		IOHandler io = new IOHandler();
 		String textpanel = "tasks: 30-07-2016 until 30-07-2016, Cooking, 2;Drink Preparation, 1;House Keeping, 2;Photo Taking, 1;Washing Up, 2."
 				+ "people: 30-07-2016 until 30-07-2016, Nico, House Keeping;Yann, Drink  Preparation;Hernan, Cooking;Andy, none;Simon, none;Bilal, none;Faz, Photo Taking;Antoine, none."
@@ -27,7 +72,7 @@ public class IOHandlerTest {
 		System.out.println(json);
 	}	
 	@Test
-	public void testGenJsonReturnsJsonFromTextPanelStringwithThreePairsOfText(){
+	public void testGenJsonReturnsJsonFromTextPanelStringwithThreePairsOfText() throws IOHandlerException{
 		IOHandler io = new IOHandler();
 		String textpanel = "Tasks:05/08/2016 until 06/08/2016;Cooking,1;Drink Preparation,1;House Keeping,1;Washing Up,1."
 				+ "People:05/08/2016 until 06/08/2016;Nico,House Keeping;Yann,Drink Preparation;Simon,none;Antoine,none."

@@ -178,23 +178,23 @@ public class ObjectSplitterTest {
 	}
 	
 	@Test
-	public void testHandlerReturnsCalendarList() throws ParseException{
+	public void testHandlerReturnsCalendarList() throws ParseException, ObjectSplitterException{
 		String task = "30/07/2016 until 06/08/2016;Cooking,2;Drink Preparation,1;House Keeping,2;Photo Taking,1; Washing Up,2;";
 		String people = "30/07/2016 until 06/08/2016;Nico,House Keeping;Yann,Drink Preparation;Hernan,Cooking;Deborah,Washing Up;Simon,none;Bilal,none;Faz,Photo Taking;Antoine,none;";
 		TreeMap<Date,Map<String,List<String>>> actualCalList = os.handler(task,people);
 		assertNotNull(actualCalList);
 	}
 	
-	@Test
-	public void testHandlerwithNoPeopleAvailable() throws ParseException{
+	@Test(expected=ObjectSplitterException.class)
+	public void testHandlerwithNoPeopleAvailable() throws ParseException, ObjectSplitterException{
 		String task = "30/07/2016 until 06/08/2016;Cooking,2;Drink Preparation,1;House Keeping,2;Photo Taking,1; Washing Up, 2;";
 		String people = "";
 		TreeMap<Date,Map<String,List<String>>> actualCalList = os.handler(task,people);
 		assertNull(actualCalList);
 	}
 	
-	@Test
-	public void testHandlerwithNoTasksAvailable() throws ParseException{
+	@Test(expected=ObjectSplitterException.class)
+	public void testHandlerwithNoTasksAvailable() throws ParseException, ObjectSplitterException{
 		String task = "";
 		String people = "Nico,30/07/2016 until 06/08/2016,House Keeping;Yann,30/07/2016 until 06/08/2016,Drink Preparation;Hernan,30/07/2016 until 05/08/2016,Cooking;Deborah,30/07/2016 until 06/08/2016,Washing Up;Simon,30/07/2016 until 06/08/2016,none;Bilal,30/07/2016 until 05/08/2016,none;Faz,30/07/2016 until 05/08/2016,Photo Taking;Antoine,30/07/2016 until 05/08/2016,none;";
 		TreeMap<Date,Map<String,List<String>>> actualCalList = os.handler(task,people);
@@ -214,7 +214,7 @@ public class ObjectSplitterTest {
 	}
 	
 	@Test
-	public void testHandlerReturnsList() throws ParseException{
+	public void testHandlerReturnsList() throws ParseException, ObjectSplitterException{
 		String task = "30/07/2016 until 06/08/2016;Cooking,2;Drink Preparation,1;House Keeping,2;Photo Taking,1; Washing Up, 2;";
 		String people = "30/07/2016 until 05/08/2016;Nico,House Keeping;Yann,Drink Preparation;Hernan,Cooking;Deborah,Washing Up;Simon,none;Bilal,none;Faz,Photo Taking;Antoine,none;";
 		TreeMap<Date,Map<String,List<String>>> actualCalList = os.handler(task,people);

@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.commons.io.FilenameUtils;
 import org.json.simple.JSONArray;
@@ -21,18 +23,22 @@ import org.json.simple.parser.JSONParser;
 public class IOHandler  {
 	private List<TreeMap<Date,Map<String,List<String>>>> list;
 
-	private static String  absolutePath;
+	private static String absolutePath;
+	private Pattern pattern;
+	private Matcher matcher;
+	private static final String DATE_PATTERN = 
+			"(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)";
 
 	public IOHandler() {
 		list = new ArrayList<TreeMap<Date,Map<String,List<String>>>>();
 	}
 
-	public List<TreeMap<Date,Map<String,List<String>>>> reader(String path){
+	public List<TreeMap<Date,Map<String,List<String>>>> reader(String path) throws ObjectSplitterException{
 		absolutePath = path;
 		JSONParser parser = new JSONParser();
-		JSONArray a = null;
+		JSONArray jsonArray = null;
 		try {
-			a = (JSONArray) parser.parse(new FileReader(path));
+			jsonArray = (JSONArray) parser.parse(new FileReader(path));
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -41,10 +47,10 @@ public class IOHandler  {
 			e.printStackTrace();
 		}
 
-		for (Object o : a) {
+		for (Object o : jsonArray) {
 			JSONObject holidays = (JSONObject) o;
-			String task = (String) holidays.get("Tasks");
-			String people = (String) holidays.get("People");
+			String task =  holidays.get("Tasks").toString();
+			String people = holidays.get("People").toString();
 			list.add(new ObjectSplitter().handler(task,people));
 		}
 		return list;
@@ -81,37 +87,65 @@ public class IOHandler  {
 		return sb.toString();
 	}
 
-	public void writer(String text, Extention ext){
-		String baseUrl = null;
-		File file = null;
-		switch (ext) {
-		case JSON:
-			baseUrl = System.getProperty("user.home");
-			file = new File(baseUrl+"/"+"Hossegor.json");
-			break;
-		case TXT:
-			baseUrl = FilenameUtils.getFullPath(absolutePath);
-			file = new File(baseUrl+"Hossegor-Calendar.txt");
-			break;
-		}
+	public String writer(String text, Extention ext){
+		File file = getFile(ext);
 		try {
 			// if file doesnt exists, then create it
 			if (!file.exists()) {
 				file.createNewFile();
 			}
-			FileWriter fw = new FileWriter(file.getAbsoluteFile());
-			BufferedWriter bw = new BufferedWriter(fw);
+			BufferedWriter bw = getBufferedWriter(file);
 			bw.write(text);
 			bw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return file.toString();
 	}
 
-	public String getJson(String textpanel) {
+	public File getFile(Extention ext) {
+		String baseUrl = null;
+		File file = null;
+		switch (ext) {
+		case JSON:
+			baseUrl = System.getProperty("user.home");
+			file = new File(baseUrl +"/"+"Hossegor.json");
+			break;
+		case TXT:
+			baseUrl = FilenameUtils.getFullPath(absolutePath);
+			file = new File(baseUrl +"Hossegor-Calendar.txt");
+			break;
+		}
+		return file;
+	}
+
+	public BufferedWriter getBufferedWriter(File file) throws IOException {
+		return new BufferedWriter(new FileWriter(file));
+	}
+
+	public void validate(final String textpanel) throws IOHandlerException{
+		pattern = Pattern.compile(DATE_PATTERN);
+		matcher = pattern.matcher(textpanel);
+		if (".".equals(textpanel.trim())){
+			throw new IOHandlerException("ERROR: Empty text - Nothing to schedule.");
+		}else if(matcher.matches()){
+			throw new IOHandlerException("ERROR: Dates cannot be found");
+		}else if (!textpanel.toUpperCase().contains("TASKS:")){
+			throw new IOHandlerException("ERROR: Tasks cannot be found");
+		}else if (!textpanel.toUpperCase().contains("PEOPLE:")){
+			throw new IOHandlerException("ERROR: People cannot be found");
+		}
+		//check for full stop at the end of each line.
+		//check for Tasks:dates until dates; [A-Z][a-z],[0-9]\.
+		//check for People:dates until dates; [A-Z][a-z],[A-Z][a-z]\.
+	}
+
+	public String getJson(String textpanel) throws IOHandlerException {
+		StringBuilder sb = null;
+		validate(textpanel);
 		String[] splittextpanel= textpanel.trim().split("\\.");
 		String noLineBreak;
-		StringBuilder sb = new StringBuilder();
+		sb = new StringBuilder();
 		int i;
 		int length = splittextpanel.length-1;
 		sb.append("[\n");

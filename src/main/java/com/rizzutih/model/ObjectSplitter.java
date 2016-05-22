@@ -73,7 +73,7 @@ public class ObjectSplitter {
 				nameAndFavoutireTask= nameDatesAndTask[i].split(",");
 				name = nameAndFavoutireTask[0];
 				if(!nameAndFavoutireTask[1].equals("none")){
-					favouriteTask = nameAndFavoutireTask[1];	
+					favouriteTask = nameAndFavoutireTask[1];
 				}
 				People p_temp = new People(name, sd, ed, favouriteTask);
 				long totalDays = calculateDates(sd, ed);
@@ -270,25 +270,23 @@ public class ObjectSplitter {
 		iterator.remove();//removing person
 	}
 
-	public TreeMap<Date, Map<String, List<String>>> handler(String task, String people) {
-		if(task==null || people ==null){
-			System.err.println("ERROR: There is a problem with the task or people list.");
-			return null;
+	public TreeMap<Date, Map<String, List<String>>> handler(String task, String people) throws ObjectSplitterException {
+		TreeMap<Date,Map<String,List<String>>> calList = null;
+		if(task==null || people==null){
+			throw new ObjectSplitterException("ERROR: There is a problem with the task or people text.");
 		}else if(task.length()==0 || people.length()==0){
-			System.err.println("ERROR: There is a problem with the number of people or tasks.");
-			return null;
+			throw new ObjectSplitterException("ERROR: There number of people or tasks is equal to zero.");
 		}else if(countPeopleInTask(task) != countPeople(people)){
-			System.err.println("ERROR: The total number of people and task is not the same.");
-			return null;
+			throw new ObjectSplitterException("ERROR: The total number of people and task is not the same.");
 		}
 		else{
 			List <Task> taskls = splittasklist(task);
 			//List <People> peoplels = splitPeopleList(people);
 			List <People> peoplels = splitPeopleListSameDate(people);
 			TreeMap<Date,Map<String,List<String>>> peopleFavTaskLs = addPeopleFavouriteTaskToList(taskList,peopleList);
-			TreeMap<Date,Map<String,List<String>>> calList = addPeopleTaskToList(taskls, peoplels, peopleFavTaskLs);
-			return calList;
+			calList = addPeopleTaskToList(taskls, peoplels, peopleFavTaskLs);
 		}
+		return calList;
 	}
 
 	public int countPeopleInTask(String task) {

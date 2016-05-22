@@ -9,6 +9,8 @@ import javax.swing.JFrame;
 
 import com.rizzutih.model.Extention;
 import com.rizzutih.model.IOHandler;
+import com.rizzutih.model.IOHandlerException;
+import com.rizzutih.model.ObjectSplitterException;
 
 public class MainFrame extends JFrame{
 
@@ -72,10 +74,21 @@ public class MainFrame extends JFrame{
 		uploadBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent ae) {
-				IOHandler ioHandler = new IOHandler();
-				ioHandler.writer(ioHandler.getJson(textPanel.getText()+"."), Extention.JSON);
 				String baseUrl = System.getProperty("user.home");
-				ioHandler.writer(ioHandler.printSchedule(ioHandler.reader(baseUrl+"/"+"Hossegor.json")), Extention.TXT);
+				String path = null;
+				IOHandler ioHandler = new IOHandler();
+				try {
+					ioHandler.writer(ioHandler.getJson(textPanel.getText()+"."), Extention.JSON);
+					path = ioHandler.writer(ioHandler.printSchedule(ioHandler.reader(baseUrl+"/"+"Hossegor.json")), Extention.TXT);
+					textPanel.appendText("\n\nDONE!");
+					textPanel.appendText("\nFind schedule in: "+ path);
+				} catch (IOHandlerException iohe) {
+					textPanel.appendText("\n" + iohe.getMessage());
+				} catch (ObjectSplitterException ose) {
+					textPanel.appendText("\n" + ose.getMessage());
+					
+				}
+				
 			}
 		});
 
