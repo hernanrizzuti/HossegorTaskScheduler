@@ -36,11 +36,10 @@ public class FormPanel extends JPanel{
 
 	public FormPanel(String key, String value, String value3) {
 		Dimension dim = getPreferredSize();
-		dim.width=450;
-		dim.height=250;
+		dim.width=425;
+		dim.height=275;
 		setPreferredSize(dim);
 
-		//keyLabel = new JLabel("Name:");
 		valueLabel2 = new JLabel(value +":");
 		valueLabel = new JLabel("Date from:");
 		valueLabel4 = new JLabel("Date to:");
