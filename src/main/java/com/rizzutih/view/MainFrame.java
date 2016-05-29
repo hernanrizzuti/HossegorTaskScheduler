@@ -20,7 +20,7 @@ public class MainFrame extends JFrame{
 	static int count = 0;
 
 	public MainFrame() {
-		super("Hossegor Dudes");
+		super("The Dudes");
 		setLayout(new BorderLayout());
 		textPanel = new TextPanel();
 		formPanel = new FormPanel("Tasks", "Tasks", "People Needed");
@@ -97,7 +97,7 @@ public class MainFrame extends JFrame{
 		add(formPanel2, BorderLayout.EAST);
 		add(uploadBtn, BorderLayout.NORTH);
 
-		setSize(800, 800);
+		setSize(1000, 1000);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);	
 	}

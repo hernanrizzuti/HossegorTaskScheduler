@@ -18,7 +18,7 @@ import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class FormPanel extends JPanel{
 
-	private JLabel keyLabel;
+	//private JLabel keyLabel;
 	private JLabel valueLabel;
 	private JTextField keyField;
 	private JButton addBtn;
@@ -36,10 +36,11 @@ public class FormPanel extends JPanel{
 
 	public FormPanel(String key, String value, String value3) {
 		Dimension dim = getPreferredSize();
-		dim.width=390;
+		dim.width=450;
+		dim.height=250;
 		setPreferredSize(dim);
 
-		keyLabel = new JLabel("Name:");
+		//keyLabel = new JLabel("Name:");
 		valueLabel2 = new JLabel(value +":");
 		valueLabel = new JLabel("Date from:");
 		valueLabel4 = new JLabel("Date to:");
@@ -95,7 +96,7 @@ public class FormPanel extends JPanel{
 		gc.weightx = 1;
 		gc.weighty = 0.1;
 
-		gc.gridx = 0;
+/*		gc.gridx = 0;
 		gc.gridy = 0;
 		gc.fill = GridBagConstraints.NONE;
 		gc.anchor = GridBagConstraints.LINE_END;
@@ -106,7 +107,7 @@ public class FormPanel extends JPanel{
 		gc.gridy = 0;
 		gc.insets = new Insets(0, 0, 0, 0);
 		gc.anchor = GridBagConstraints.LINE_START;
-		add(keyField, gc);
+		add(keyField, gc);*/
 
 		//////////////// SECOND ROW /////////////////////////
 		
@@ -185,7 +186,7 @@ public class FormPanel extends JPanel{
 		gc.gridy =5;
 		gc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gc.insets = new Insets(0, 0, 0, 0);
-		add(addBtn, gc);
+		add(doneBtn, gc);
 		
 		//////////////// SEVENTH ROW /////////////////////////
 
@@ -196,7 +197,7 @@ public class FormPanel extends JPanel{
 		gc.gridy =5;
 		gc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gc.insets = new Insets(0, 0, 0, 0);
-		add(doneBtn, gc);
+		add(addBtn, gc);
 	}
 	
 	public void setFormListener(FormListener formListener) {
