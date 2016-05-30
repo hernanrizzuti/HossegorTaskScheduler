@@ -63,25 +63,25 @@ public class FormPanel extends JPanel{
 				}
 			}
 		});
-		
+
 		UtilDateModel modelFrom = new UtilDateModel();
 		JDatePanelImpl datePanelFrom = new JDatePanelImpl(modelFrom);
 		datePickerFrom = new JDatePickerImpl(datePanelFrom, new DateLabelFormatter());
-		
+
 		UtilDateModel modelTo = new UtilDateModel();
 		JDatePanelImpl datePanelTo = new JDatePanelImpl(modelTo);
 		datePickerTo = new JDatePickerImpl(datePanelTo, new DateLabelFormatter());
-		
+
 		doneBtn = new JButton("DONE");
 		doneBtn.addActionListener(new ActionListener() {
-			
+
 			public void actionPerformed(ActionEvent e) {
 				if(MainFrame.count > 0){
 					MainFrame.count = 1;
 				}
 			}
 		});
-		
+
 
 		Border innerBorder = BorderFactory.createTitledBorder("Add " + value);
 		Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
@@ -91,11 +91,11 @@ public class FormPanel extends JPanel{
 		GridBagConstraints gc = new GridBagConstraints();
 
 		//////////////// FIRST ROW /////////////////////////
-		
+
 		gc.weightx = 1;
 		gc.weighty = 0.1;
 
-/*		gc.gridx = 0;
+		/*		gc.gridx = 0;
 		gc.gridy = 0;
 		gc.fill = GridBagConstraints.NONE;
 		gc.anchor = GridBagConstraints.LINE_END;
@@ -109,7 +109,7 @@ public class FormPanel extends JPanel{
 		add(keyField, gc);*/
 
 		//////////////// SECOND ROW /////////////////////////
-		
+
 		gc.weightx = 1;
 		gc.weighty = 0.1;
 
@@ -126,10 +126,10 @@ public class FormPanel extends JPanel{
 		add(datePickerFrom, gc);
 
 		////////////////THIRD ROW /////////////////////////
-		
+
 		gc.weightx = 1;
 		gc.weighty = 0.1;
-		
+
 		gc.gridx = 0;
 		gc.gridy = 2;
 		gc.anchor = GridBagConstraints.LINE_END;
@@ -143,7 +143,7 @@ public class FormPanel extends JPanel{
 		add(datePickerTo, gc);
 
 		//////////////// FOURTH ROW /////////////////////////
-		
+
 		gc.weightx = 1;
 		gc.weighty = 0.1;
 
@@ -160,7 +160,7 @@ public class FormPanel extends JPanel{
 		add(valueField2, gc);
 
 		//////////////// FIFTH ROW /////////////////////////
-		
+
 		gc.weightx = 1;
 		gc.weighty = 0.1;
 
@@ -186,7 +186,7 @@ public class FormPanel extends JPanel{
 		gc.anchor = GridBagConstraints.FIRST_LINE_START;
 		gc.insets = new Insets(0, 0, 0, 0);
 		add(doneBtn, gc);
-		
+
 		//////////////// SEVENTH ROW /////////////////////////
 
 		gc.weightx = 1;
@@ -198,7 +198,7 @@ public class FormPanel extends JPanel{
 		gc.insets = new Insets(0, 0, 0, 0);
 		add(addBtn, gc);
 	}
-	
+
 	public void setFormListener(FormListener formListener) {
 		this.formListener = formListener;
 	}
