@@ -16,6 +16,7 @@ import com.rizzutih.model.TaskHistory;
 public class MainFrameTest {
 	private MainFrame mf;
 	@Mock private Map<String, Integer> mockmap;
+	@Mock private Map<String, Integer> mockcountmap;
 	@Mock private TaskHistory th;
 
 	@Before
@@ -51,6 +52,11 @@ public class MainFrameTest {
 	@Test(expected=IOHandlerException.class)
 	public void testCheckTaskThrowsIOException() throws IOHandlerException {
 		mf.checkTask("ndnd");
+	}
+	
+	@Test
+	public void testCheckFavouriteTaskNumber() throws IOHandlerException {
+		mf.checkFavouriteTaskNumber("Washing up");
 	}
 
 }

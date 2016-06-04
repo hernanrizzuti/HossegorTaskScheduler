@@ -12,7 +12,7 @@ public class Main {
 		SwingUtilities.invokeLater(new Runnable() {
 			
 			public void run() {
-				new MainFrame(new TaskHistory(new HashMap<String, Integer>()));
+				new MainFrame(new TaskHistory(new HashMap<String, Integer>(), new HashMap<String, Integer>()));
 							
 			}
 		});

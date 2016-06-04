@@ -43,13 +43,13 @@ public class IOHandlerTest {
 	@Test
 	public void testgetFileJSONExtention() throws IOException{
 		IOHandler io = new IOHandler();
-		assertEquals("C:\\Users\\euror\\Hossegor.json", io.getFile(Extention.JSON).getAbsolutePath());
+		assertEquals(true, io.getFile(Extention.JSON).getAbsolutePath().contains("json"));
 	}
 	
 	@Test
 	public void testgetFileTXTExtention() throws IOException{
 		IOHandler io = new IOHandler();
-		assertEquals("C:\\Users\\euror\\Documents\\JavaWorkspace\\HossegorTaskScheduler\\nullHossegor-Calendar.txt", io.getFile(Extention.TXT).getAbsolutePath());
+		assertEquals(true, io.getFile(Extention.TXT).getAbsolutePath().contains("txt"));
 	}
 	
 	
