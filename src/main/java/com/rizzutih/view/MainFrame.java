@@ -1,17 +1,13 @@
 package com.rizzutih.view;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-
 import com.rizzutih.model.Extention;
 import com.rizzutih.model.IOHandler;
 import com.rizzutih.model.IOHandlerException;
@@ -21,6 +17,7 @@ import com.rizzutih.model.TaskHistory;
 public class MainFrame extends JFrame{
 
 	private JTextArea textPanel;
+	private JTextArea errortextPanel;
 	private FormPanel formPanel, formPanel2;
 	private JButton uploadBtn;
 	private JButton cleanBtn;
@@ -31,8 +28,9 @@ public class MainFrame extends JFrame{
 	public MainFrame(TaskHistory taskHistory) {
 		super("The Dudes");
 		this.taskHistory=taskHistory;
-		setLayout(new GridLayout(3,2,3,3));
 		textPanel = new JTextArea();
+		errortextPanel = new JTextArea();
+		errortextPanel.setForeground(Color.RED);
 		createPanels(taskHistory);
 		createButtoms(taskHistory);
 
@@ -44,6 +42,7 @@ public class MainFrame extends JFrame{
 		JPanel sPnl = new JPanel();
 		sPnl.add(uploadBtn, BorderLayout.WEST);
 		sPnl.add(cleanBtn, BorderLayout.EAST);
+		sPnl.add(errortextPanel, BorderLayout.SOUTH);
 		add(sPnl,BorderLayout.SOUTH);
 
 		setSize(900, 900);
@@ -58,6 +57,7 @@ public class MainFrame extends JFrame{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				textPanel.setText("");
+				errortextPanel.setText("");
 				taskHistory.clearHistory();
 				count=0;
 			}
@@ -75,11 +75,11 @@ public class MainFrame extends JFrame{
 					path = ioHandler.writer(ioHandler.printSchedule(ioHandler.reader(baseUrl+"/"+"Hossegor.json")), Extention.TXT);
 					textPanel.append("\n\nDONE!");
 					textPanel.append("\nFind schedule in: "+ path);
+					taskHistory.clearHistory();
 				} catch (IOHandlerException iohe) {
-					textPanel.append("\n" + iohe.getMessage());
+					setException(iohe);
 				} catch (ObjectSplitterException ose) {
-					textPanel.append("\n" + ose.getMessage());
-
+					setException(ose);
 				}
 
 			}
@@ -98,13 +98,16 @@ public class MainFrame extends JFrame{
 				String value4 = e.getValue4();
 				if(!value2.equals("") || !value2.equals("")){
 					if(key.equals("Tasks")){
+						if((count == 0) || (count==1)){
+							taskHistory.clearHistory();
+						}
 						try {
 							value3 = checkNum(value3);
 							taskHistory.add(none, 1);
 							taskHistory.add(value2, Integer.parseInt(value3));
 							outputText(key, value, value2, value3, value4);
 						} catch (IOHandlerException e1) {
-							textPanel.append("\n" + e1.getMessage());
+							setException(e1);
 						}
 
 					}
@@ -126,18 +129,20 @@ public class MainFrame extends JFrame{
 						value3 = blankToNone(value3);
 						try {
 							checkTask(value3);
+							checkFavouriteTaskNumber(value3);
 							outputText(key, value, value2, value3, value4);
 						} catch (IOHandlerException e1) {
-							textPanel.append("\n" + e1.getMessage());
+							setException(e1);
 						}
 
 					}
 				}
 			}
 		});
-
 	}
+
 	public void outputText(String key, String value, String value2,String value3, String value4) {
+		errortextPanel.setText("");
 		if(count == 0){
 			textPanel.append(key + ": " + value + " until " + value4 +";"+value2 + ","+ value3);
 			count++;
@@ -148,10 +153,10 @@ public class MainFrame extends JFrame{
 		}
 		count++;
 	}
-	
+
 	public String blankToNone(String favourityTask) {
 		if (favourityTask.equals("")){
-			favourityTask="none";
+			favourityTask=none;
 		}
 		return favourityTask;
 	}
@@ -166,17 +171,22 @@ public class MainFrame extends JFrame{
 	public String checkTask(String taskName) throws IOHandlerException {
 		String tempTaskName = taskName.toLowerCase();
 		if(taskHistory.get(tempTaskName)==0){
-			throw new IOHandlerException("ERROR: CheckFavourityTaskNumber Task Is Not Part of The Task List.");
+			throw new IOHandlerException("ERROR: Task Is Not Part of The Task List.");
 		}
 		return taskName;
 	}
 
-	public void checkFavouriteTaskNumber(String favouriteTask) {
+	public void checkFavouriteTaskNumber(String favouriteTask) throws IOHandlerException {
 		if(!none.equals(favouriteTask)){
-			if(taskHistory.get(favouriteTask))
-			taskHistory.countfavourityTask(favouriteTask);	
+			if(taskHistory.getTotalCountFavouriteTask(favouriteTask) <	taskHistory.get(favouriteTask)){
+				taskHistory.countfavourityTask(favouriteTask);	
+			}else
+				throw new IOHandlerException("ERROR: Exceeded The Number Tasks available.");
 		}
+	}
 
-		
+	public void setException(Exception exception) {
+		errortextPanel.setText("");
+		errortextPanel.append("\n" + exception.getMessage());
 	}
 }

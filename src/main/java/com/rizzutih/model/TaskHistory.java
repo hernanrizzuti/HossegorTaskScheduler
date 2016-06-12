@@ -4,6 +4,11 @@ import java.util.Map;
 
 public class TaskHistory {
 
+	@Override
+	public String toString() {
+		return "TaskHistory [map=" + map + ", countmap=" + countmap + "]";
+	}
+
 	private Map<String, Integer> map;
 	private Map<String, Integer> countmap;
 
@@ -17,10 +22,10 @@ public class TaskHistory {
 	}
 
 	public int get(String taskName) {
-		if(!map.containsKey(taskName)){
-			return 0;
+		if(map.containsKey(taskName.toLowerCase())){
+			return map.get(taskName.toLowerCase());
 		}
-		return map.get(taskName);
+		return 0;
 	}
 
 	public void clearHistory(){
@@ -30,15 +35,24 @@ public class TaskHistory {
 
 	public int countfavourityTask(String taskName) {
 		int total =0;
-		if(countmap.containsKey(taskName)){
-			total = countmap.put(taskName,
-					countmap.get(taskName)+1);
+		String tempTaskName = taskName.toLowerCase();
+		if(countmap.containsKey(tempTaskName)){
+			total = countmap.put(tempTaskName, countmap.get(tempTaskName)+1).intValue();
 		}else{
-			total = countmap.put(taskName,1);
+				countmap.put(tempTaskName,1);
+				total = 1;
 		}
 		return total;
 	}
 
+	public int getTotalCountFavouriteTask(String favouriteTask) {
+		if(countmap.containsKey(favouriteTask.toLowerCase())){
+			return countmap.get(favouriteTask.toLowerCase());
+		}
+		return 0;
+		
+	}
+	
 
 
 }

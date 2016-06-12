@@ -31,25 +31,39 @@ public class TaskHistoryTest {
 	}
 	
 	@Test
-	public void testgetTaskfromHistoryCallsGet() {
-		when(mockmap.containsKey("Washing up")).thenReturn(true);
-		when(mockmap.get("Washing up")).thenReturn(1);
-		th.get("Washing up");
-		verify(mockmap).get("Washing up");
+	public void testGetTaskFromHistoryCallsGet() {
+		when(mockmap.containsKey("Washing up".toLowerCase())).thenReturn(true);
+		when(mockmap.get("Washing up".toLowerCase())).thenReturn(1);
+		th.get("Washing up".toLowerCase());
+		verify(mockmap).get("Washing up".toLowerCase());
 	}
 	
 	@Test
 	public void testCountFavourityTaskReturn1(){
-		when(mockcountmap.put("Washing up", 1)).thenReturn(1);
-		assertEquals(1, th.countfavourityTask("Washing up"));
+		when(mockcountmap.put("Washing up".toLowerCase(), 1)).thenReturn(1);
+		assertEquals(1, th.countfavourityTask("Washing up".toLowerCase()));
 	}
 	
 	@Test
 	public void testCountFavourityTask(){
-		when(mockcountmap.containsKey("Washing up")).thenReturn(true);
-		when(mockcountmap.get("Washing up")).thenReturn(1);
-		when(mockcountmap.put("Washing up", 2)).thenReturn(2);
-		assertEquals(2, th.countfavourityTask("Washing up"));
+		when(mockcountmap.containsKey("Washing up".toLowerCase())).thenReturn(true);
+		when(mockcountmap.get("Washing up".toLowerCase())).thenReturn(1);
+		when(mockcountmap.put("Washing up".toLowerCase(), 2)).thenReturn(2);
+		assertEquals(2, th.countfavourityTask("Washing up".toLowerCase()));
 	}
-
+	@Test
+	public void testgetCountFavouriteTaskCallsGet() {
+		when(mockcountmap.containsKey("Washing up".toLowerCase())).thenReturn(true);
+		when(mockcountmap.get("Washing up".toLowerCase())).thenReturn(1);
+		th.getTotalCountFavouriteTask("Washing up".toLowerCase());
+		verify(mockcountmap).get("Washing up".toLowerCase());
+	}
+	
+	@Test
+	public void testgetCountFavouriteTaskReturnZero() {
+		when(mockcountmap.containsKey("Washing up")).thenReturn(false);
+		when(mockcountmap.get("Washing up")).thenReturn(1);
+		th.getTotalCountFavouriteTask("Washing up");
+		verify(mockcountmap, never()).get("Washing up");
+	}
 }

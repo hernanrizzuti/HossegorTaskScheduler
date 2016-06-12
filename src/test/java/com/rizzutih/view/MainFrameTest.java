@@ -2,6 +2,7 @@ package com.rizzutih.view;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Before;
@@ -53,10 +54,25 @@ public class MainFrameTest {
 	public void testCheckTaskThrowsIOException() throws IOHandlerException {
 		mf.checkTask("ndnd");
 	}
-	
+
 	@Test
-	public void testCheckFavouriteTaskNumber() throws IOHandlerException {
-		mf.checkFavouriteTaskNumber("Washing up");
+	public void testCheckFavouriteTaskNumberNeverCallsgetTotalCountFavTask() throws IOHandlerException {
+		mf.checkFavouriteTaskNumber("none");
+		verify(th, never()).countfavourityTask("none");
 	}
 
+	@Test
+	public void testcheckFavouriteTaskNumberCallsgetTotalCountFavTask() throws IOHandlerException{
+		when(th.getTotalCountFavouriteTask("Cooking")).thenReturn(0);
+		when(th.get("Cooking")).thenReturn(1);
+		mf.checkFavouriteTaskNumber("Cooking");
+		verify(th).countfavourityTask("Cooking");
+	}
+
+	@Test(expected=IOHandlerException.class)
+	public void testcheckFavouriteTaskNumberThrowsIOHandlerException() throws IOHandlerException{
+		when(th.getTotalCountFavouriteTask("Cooking")).thenReturn(2);
+		when(th.get("Cooking")).thenReturn(1);
+		mf.checkFavouriteTaskNumber("Cooking");
+	}
 }
