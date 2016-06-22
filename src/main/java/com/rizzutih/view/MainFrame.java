@@ -47,7 +47,7 @@ public class MainFrame extends JFrame{
 		sPnl.add(errortextPanel, BorderLayout.SOUTH);
 		add(sPnl,BorderLayout.SOUTH);
 
-		setSize(1300, 900);
+		setSize(1400, 900);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);	
 	}
