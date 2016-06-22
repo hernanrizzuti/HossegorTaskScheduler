@@ -24,6 +24,7 @@ public class MainFrame extends JFrame{
 	static int count = 0;
 	private String none = "none";
 	private TaskHistory taskHistory;
+	private CalendarPanel calendarPanel;
 
 	public MainFrame(TaskHistory taskHistory) {
 		super("The Dudes");
@@ -33,10 +34,11 @@ public class MainFrame extends JFrame{
 		errortextPanel.setForeground(Color.RED);
 		createPanels(taskHistory);
 		createButtoms(taskHistory);
-
+		calendarPanel = new CalendarPanel();
 		JPanel nPnl = new JPanel();
-		nPnl.add(formPanel, BorderLayout.WEST);
-		nPnl.add(formPanel2, BorderLayout.EAST);
+		nPnl.add(calendarPanel, BorderLayout.LINE_START);
+		nPnl.add(formPanel, BorderLayout.CENTER);
+		nPnl.add(formPanel2, BorderLayout.LINE_END);
 		add(nPnl, BorderLayout.NORTH);
 		add(textPanel, BorderLayout.CENTER);
 		JPanel sPnl = new JPanel();
@@ -45,7 +47,7 @@ public class MainFrame extends JFrame{
 		sPnl.add(errortextPanel, BorderLayout.SOUTH);
 		add(sPnl,BorderLayout.SOUTH);
 
-		setSize(900, 900);
+		setSize(1300, 900);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setVisible(true);	
 	}
@@ -92,10 +94,10 @@ public class MainFrame extends JFrame{
 		formPanel.setFormListener(new FormListener(){
 			public void formEventOccurred(FormEvent e) {
 				String key = e.getKey();
-				String value = e.getValue();
+				String value  = calendarPanel.datePickerFrom.getJFormattedTextField().getText();
 				String value2 = e.getValue2();
 				String value3 = e.getValue3();
-				String value4 = e.getValue4();
+				String value4 = calendarPanel.datePickerTo.getJFormattedTextField().getText();
 				if(!value2.equals("") || !value2.equals("")){
 					if(key.equals("Tasks")){
 						if((count == 0) || (count==1)){
@@ -120,10 +122,10 @@ public class MainFrame extends JFrame{
 		formPanel2.setFormListener(new FormListener(){
 			public void formEventOccurred(FormEvent e){
 				String key = e.getKey();
-				String value = e.getValue();
+				String value  = calendarPanel.datePickerFrom.getJFormattedTextField().getText();
 				String value2 = e.getValue2();
 				String value3 = e.getValue3();
-				String value4 = e.getValue4();
+				String value4 = calendarPanel.datePickerTo.getJFormattedTextField().getText();
 				if(!value2.equals("") || !value2.equals("")){
 					if(key.equals("People")){
 						value3 = blankToNone(value3);

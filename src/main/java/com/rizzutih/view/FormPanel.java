@@ -18,8 +18,6 @@ import net.sourceforge.jdatepicker.impl.UtilDateModel;
 
 public class FormPanel extends JPanel{
 
-	//private JLabel keyLabel;
-	private JLabel valueLabel;
 	private JTextField keyField;
 	private JButton addBtn;
 	private FormListener formListener;
@@ -27,50 +25,38 @@ public class FormPanel extends JPanel{
 	private JTextField valueField2;
 	private JLabel valueLabel3;
 	private JTextField valueField3;
-	private JLabel valueLabel4;
-
 	private JButton doneBtn;
 
-	private JDatePickerImpl datePickerFrom;
-	private JDatePickerImpl datePickerTo;
-
-	public FormPanel(String key, String value, String value3) {
+	public FormPanel(String key, String value2, String value3) {
 		Dimension dim = getPreferredSize();
 		dim.width=425;
-		dim.height=275;
+		dim.height=150;
 		setPreferredSize(dim);
 
-		valueLabel2 = new JLabel(value +":");
-		valueLabel = new JLabel("Date from:");
-		valueLabel4 = new JLabel("Date to:");
+		valueLabel2 = new JLabel(value2 +":");
 		valueLabel3 = new JLabel(value3 +":");
 		keyField = new JTextField(key, 10);
 		valueField2 = new JTextField(10);
 		valueField3 = new JTextField(10);
+
 
 		addBtn = new JButton("ADD");
 		addBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				String key = keyField.getText();
-				String value  = datePickerFrom.getJFormattedTextField().getText();//valueField.getText();
+				//String value  = datePickerFrom.getJFormattedTextField().getText();
 				String value2 = valueField2.getText();
 				String value3 = valueField3.getText();
-				String value4 = datePickerTo.getJFormattedTextField().getText();//valueField4.getText();
-				FormEvent ev = new FormEvent(this, key, value,value2,value3,value4);
+				//String value4 = datePickerTo.getJFormattedTextField().getText();
+				FormEvent ev = new FormEvent(this, key,/* value,*/value2,value3/*,value4*/);
 				if(formListener!=null){
 					formListener.formEventOccurred(ev);
 				}
 			}
 		});
 
-		UtilDateModel modelFrom = new UtilDateModel();
-		JDatePanelImpl datePanelFrom = new JDatePanelImpl(modelFrom);
-		datePickerFrom = new JDatePickerImpl(datePanelFrom, new DateLabelFormatter());
-
-		UtilDateModel modelTo = new UtilDateModel();
-		JDatePanelImpl datePanelTo = new JDatePanelImpl(modelTo);
-		datePickerTo = new JDatePickerImpl(datePanelTo, new DateLabelFormatter());
+	
 
 		doneBtn = new JButton("DONE");
 		doneBtn.addActionListener(new ActionListener() {
@@ -83,34 +69,16 @@ public class FormPanel extends JPanel{
 		});
 
 
-		Border innerBorder = BorderFactory.createTitledBorder("Add " + value);
+		Border innerBorder = BorderFactory.createTitledBorder("Add " + value2);
 		Border outerBorder = BorderFactory.createEmptyBorder(5,5,5,5);
 		setBorder(BorderFactory.createCompoundBorder(outerBorder, innerBorder));
 
 		setLayout(new GridBagLayout());
 		GridBagConstraints gc = new GridBagConstraints();
 
-		//////////////// FIRST ROW /////////////////////////
-
-		gc.weightx = 1;
-		gc.weighty = 0.1;
-
-		/*		gc.gridx = 0;
-		gc.gridy = 0;
-		gc.fill = GridBagConstraints.NONE;
-		gc.anchor = GridBagConstraints.LINE_END;
-		gc.insets = new Insets(0, 0, 0, 5);
-		add(keyLabel, gc);
-
-		gc.gridx = 1;
-		gc.gridy = 0;
-		gc.insets = new Insets(0, 0, 0, 0);
-		gc.anchor = GridBagConstraints.LINE_START;
-		add(keyField, gc);*/
-
 		//////////////// SECOND ROW /////////////////////////
 
-		gc.weightx = 1;
+/*		gc.weightx = 1;
 		gc.weighty = 0.1;
 
 		gc.gridx = 0;
@@ -140,7 +108,7 @@ public class FormPanel extends JPanel{
 		gc.gridy = 2;
 		gc.insets = new Insets(0, 0, 0, 0);
 		gc.anchor = GridBagConstraints.LINE_START;
-		add(datePickerTo, gc);
+		add(datePickerTo, gc);*/
 
 		//////////////// FOURTH ROW /////////////////////////
 
